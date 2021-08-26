@@ -3,11 +3,14 @@ using namespace std;
 typedef long long ll;
 
 
+
 const int FASTIO = [](){
 	ios_base::sync_with_stdio(false);
 	cin.tie(nullptr);
+	cin.tie(nullptr);
 	return 0;
 }();
+
 
 class bst
 {
@@ -40,7 +43,7 @@ class bst
 				cout << "The key" << key << "has already been added to the tree" << '\n';
 			}
 		}
-		
+
 		void printInOrderPrivate(node* ptr){
 			if (root != nullptr){
 				//step 1
@@ -57,9 +60,40 @@ class bst
 			} else{
 				cout << "The tree is empty\n";
 			}
-			
 		}
 
+		node* returnNodePrivate(int key, node* ptr){
+			if (ptr != nullptr){
+				if (ptr-> key == key){
+					return ptr;
+				}
+				else{
+					if(key < ptr->key){
+						return returnNodePrivate(key, ptr->left);
+					}
+					if(key > ptr->key){
+						return returnNodePrivate(key, ptr->right);
+					}
+				}
+			}
+			else{
+				return nullptr;
+			}
+		}
+		int findSmallestPrivate(node* ptr){
+			if (root == nullptr){
+				cout << "The tree is empty\n";
+				return -1000;
+			}
+			else{
+				if (ptr->left != nullptr){
+					return findSmallestPrivate(ptr->left);
+				}
+				else{
+					return ptr->key;
+				}
+			}
+		}
 	public:
 		bst() { root  = nullptr; }
 			
@@ -77,8 +111,38 @@ class bst
 		void printInOrder(){
 			printInOrderPrivate(root);
 		}
+		node* returnNode(int key){
+			return returnNodePrivate(key, root);
+		}
+		int returnRootKey(){
+			if (root != nullptr){
+				return root->key;
+			}
+			else{
+				return -1000;
+			}
+		}
+		void PrintChildren(int key){
+			node* ptr = returnNode(key);
 
+			if (ptr != nullptr){
+				cout << "Parent Node = " << ptr->key << '\n';
 
+				ptr->left == nullptr ? 
+					cout << "Left child is NULL\n":
+					cout << "Left child is " << ptr->left->key << '\n';
+
+				ptr->right == nullptr ? 
+					cout << "Right child is NULL\n":
+					cout << "Right child is " << ptr->right->key << '\n';
+			}
+			else{
+				cout << "Key " << key << "is not in the tree\n";
+			}
+		}
+		int findSmallest(){
+			return findSmallestPrivate(root);
+		}
 };
 
 
@@ -94,9 +158,8 @@ int main(){
 	myTree.printInOrder();
 	cout << "Printing the tree in order after adding numbers\n";
 	for(int& x : treeKeys) myTree.addLeaf(x);
-//myTree.printInOrder();
-	myTree.addLeaf(10);
-	myTree.printInOrder();
+	myTree.PrintChildren(myTree.returnRootKey());
+	cout << myTree.findSmallest() << '\n';
 
 
 }
