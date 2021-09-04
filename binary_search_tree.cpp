@@ -3,14 +3,11 @@ using namespace std;
 typedef long long ll;
 
 
-
 const int FASTIO = [](){
 	ios_base::sync_with_stdio(false);
 	cin.tie(nullptr);
-	cin.tie(nullptr);
 	return 0;
 }();
-
 
 class bst
 {
@@ -94,6 +91,32 @@ class bst
 				}
 			}
 		}
+		void removeNodePrivate(int key, node* parent){
+			if (root != nullptr){
+				if (root->key == key){
+					RemoveRootMatch();
+				}
+				else{
+					if (key < parent->key && parent->left != nullptr){
+						parent->left->key == key ?
+							RemoveMatch(parent, parent->left,true):
+							removeNodePrivate(key, parent->left);
+					}
+					else if (key > parent->key && parent->right != nullptr){
+						parent->right->key == key ? 
+							RemoveMatch(parent, parent->right, false):
+							removeNodePrivate(key, parent->right);
+					}
+					else{
+						cout << "The key " << key << " was not found in the tree\n";
+					}
+				}
+			}
+			else{
+				cout << "The tree is empty!\n";
+			}
+
+		}
 	public:
 		bst() { root  = nullptr; }
 			
@@ -142,6 +165,9 @@ class bst
 		}
 		int findSmallest(){
 			return findSmallestPrivate(root);
+		}
+		void removeNode(int key){
+			removeNodePrivate(key, root);
 		}
 };
 
